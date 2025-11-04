@@ -32,7 +32,7 @@ jobs:
       - name: Define image version
         id: meta
         run: |
-          echo "VERSION=5.29" >> $GITHUB_OUTPUT
+          echo "VERSION=5.28" >> $GITHUB_OUTPUT
 
       - name: Build and push Strapi v5 image
         uses: docker/build-push-action@v6
