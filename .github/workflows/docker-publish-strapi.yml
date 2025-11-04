@@ -1,0 +1,52 @@
+name: Build and Push Strapi v5 image
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'strapi-starter-v5/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'turbo.json'
+      - 'yarn.lock'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU (for multi-arch, optional)
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Define image version
+        id: meta
+        run: |
+          echo "VERSION=5.29" >> $GITHUB_OUTPUT
+
+      - name: Build and push Strapi v5 image
+        uses: docker/build-push-action@v6
+        with:
+          # Use the monorepo root (strapi-starter-v5) as build context so Dockerfile COPY paths resolve correctly
+          context: strapi-starter-v5
+          # Dockerfile path is relative to the context; apps/strapi mirrors docker-compose setup
+          file: apps/strapi/Dockerfile
+          push: true
+          tags: |
+            docker.io/marcelolealhub/imobai-strapi-v5:${{ steps.meta.outputs.VERSION }}
+            docker.io/marcelolealhub/imobai-strapi-v5:latest
+          cache-from: type=registry,ref=docker.io/marcelolealhub/imobai-strapi-v5:buildcache
+          cache-to: type=registry,ref=docker.io/marcelolealhub/imobai-strapi-v5:buildcache,mode=max
+
+      - name: Print pushed tags
+        run: echo "Pushed docker.io/marcelolealhub/imobai-strapi-v5:${{ steps.meta.outputs.VERSION }} and :latest"

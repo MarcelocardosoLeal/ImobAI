@@ -1,0 +1,443 @@
+{
+  "name": "mcp-server-sdr-imobiliarias-crm",
+  "nodes": [
+    {
+      "parameters": {
+        "name": "find_customer",
+        "description": "Função que busca o cliente pelo numero do celular",
+        "workflowId": {
+          "__rl": true,
+          "value": "Ja5wyttEsTrsgSYN",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Ja5wyttEsTrsgSYN",
+          "cachedResultName": "ToolsCustomerStripe-Imobiliaria"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "function": "get_or_create",
+            "phone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('phone', `Telefone do cliente`, 'string') }}",
+            "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', `Nome do Cliente`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "function",
+              "displayName": "function",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "cliente_intencao",
+              "displayName": "cliente_intencao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "imovel_pretendido",
+              "displayName": "imovel_pretendido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "nivel_interesse",
+              "displayName": "nivel_interesse",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "localizacao_preferida",
+              "displayName": "localizacao_preferida",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "retornar_em",
+              "displayName": "retornar_em",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.1,
+      "position": [
+        192,
+        240
+      ],
+      "id": "9078b928-79a7-4817-bf68-49518f7c790f",
+      "name": "find_customer"
+    },
+    {
+      "parameters": {
+        "name": "update_customer",
+        "description": "Função que atualiza  os dados do cliente pelo numero do celular",
+        "workflowId": {
+          "__rl": true,
+          "value": "Ja5wyttEsTrsgSYN",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Ja5wyttEsTrsgSYN",
+          "cachedResultName": "ToolsCustomerStripe-Imobiliaria"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "function": "update",
+            "phone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('phone', `Telefone do cliente`, 'string') }}",
+            "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', `Nome do Cliente`, 'string') }}",
+            "email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('email', `E-mail do cliente`, 'string') }}",
+            "cliente_intencao": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('cliente_intencao', `Intenção do cliente: alugar, comprar, trocar ou indeciso`, 'string') }}",
+            "imovel_pretendido": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('imovel_pretendido', `Imóvel que o cliente busca, como casa, apartamento ou nome específico`, 'string') }}",
+            "nivel_interesse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('nivel_interesse', `Nível de interesse do cliente em comprar ou alugar ... utiliza \"baixo\", \"médio\", \"alto\"`, 'string') }}",
+            "localizacao_preferida": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('localizacao_preferida', `Localização onde o cliente deseja adquirir ou alugar um imóvel`, 'string') }}",
+            "retornar_em": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('retornar_em', `Melhor data para o corretor entrar em contato`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "function",
+              "displayName": "function",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "cliente_intencao",
+              "displayName": "cliente_intencao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "imovel_pretendido",
+              "displayName": "imovel_pretendido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "nivel_interesse",
+              "displayName": "nivel_interesse",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "localizacao_preferida",
+              "displayName": "localizacao_preferida",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "retornar_em",
+              "displayName": "retornar_em",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.1,
+      "position": [
+        368,
+        240
+      ],
+      "id": "61d470c8-619f-45fd-8a39-c9c2283c0a7c",
+      "name": "update_customer"
+    },
+    {
+      "parameters": {
+        "description": "Função que retorna uma lista dos imóveis com dados reduzidos ",
+        "workflowId": {
+          "__rl": true,
+          "value": "PtCVaYLqOVpb3neL",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/PtCVaYLqOVpb3neL",
+          "cachedResultName": "ToolslmoveisStrapi"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "1",
+            "type": "all"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        240
+      ],
+      "id": "5402dce9-1f76-4fb8-97fa-6522a844f707",
+      "name": "getall_imoveis",
+      "notes": "Lista todos os imóveis"
+    },
+    {
+      "parameters": {
+        "description": "Função que retorna todos os dados (imagens, links, descrições) de um imóvel específico pelo ID",
+        "workflowId": {
+          "__rl": true,
+          "value": "PtCVaYLqOVpb3neL",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/PtCVaYLqOVpb3neL",
+          "cachedResultName": "ToolslmoveisStrapi"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id', `ID numérico do imóvel que o cliente deseja ver as informações, exemplo: 1 , 15`, 'string') }}",
+            "type": "=get"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1024,
+        240
+      ],
+      "id": "0df33c4c-d5a0-4d3e-a4a9-85e7359d10f8",
+      "name": "get_imovel_by_id"
+    },
+    {
+      "parameters": {
+        "path": "mcpimob"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        400,
+        -32
+      ],
+      "id": "98737fc4-842b-4b91-8d65-d8707a0f71b4",
+      "name": "MCP Server Trigger",
+      "webhookId": "d82bc4ae-faac-4938-b0c7-baf26701b0dd",
+      "notes": "MCP com todas tools necessárias buscar informações de imóveis aos cliente e fazer agendamento de visitas"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        576,
+        240
+      ],
+      "id": "4b97a262-1709-40f3-92e9-c850e142ee43",
+      "name": "Calculator",
+      "notes": "Calcular metragem de imóveis e outros cálculos inerente a este ramo de atividade."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "find_customer": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_customer": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getall_imoveis": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_imovel_by_id": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6391be9c-7d3e-4ef5-a043-f2301305ae5d",
+  "meta": {
+    "instanceId": "5fc63ec46c88470787bbf11071373b797c19b49ae6f14c82986be64648574f11"
+  },
+  "id": "6ZDeYsSGQUQjCFVq",
+  "tags": []
+}
