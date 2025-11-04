@@ -24,7 +24,9 @@ COPY . .
 
 # see https://turbo.build/repo/docs/reference/command-line-reference#turbo-prune---scopetarget
 RUN yarn global add turbo@^1.13.4
-RUN turbo prune ${WORKSPACE} --docker
+# turbo prune requires a scope flag to target the workspace package
+# see https://turbo.build/repo/docs/reference/command-line-reference#turbo-prune---scopetarget
+RUN turbo prune --scope=${WORKSPACE} --docker
 
 # -------------------------- stage installer ---------------------------------
 FROM base AS installer
