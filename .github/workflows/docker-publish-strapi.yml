@@ -39,8 +39,10 @@ jobs:
         with:
           # Use the monorepo root (strapi-starter-v5) as build context so Dockerfile COPY paths resolve correctly
           context: strapi-starter-v5
-          # Dockerfile path is relative to the context; apps/strapi mirrors docker-compose setup
-          file: apps/strapi/Dockerfile
+          # Para evitar erro de resolução (lstat apps: no such file or directory),
+          # use o caminho do Dockerfile relativo à raiz do repositório.
+          # O contexto continua sendo strapi-starter-v5.
+          file: strapi-starter-v5/apps/strapi/Dockerfile
           push: true
           tags: |
             docker.io/marcelolealhub/imobai-strapi-v5:${{ steps.meta.outputs.VERSION }}
