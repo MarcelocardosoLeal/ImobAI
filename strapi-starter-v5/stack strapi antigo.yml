@@ -1,0 +1,54 @@
+version: "3.7"
+
+services:
+  strapi_bloco:
+    image: strapi/strapi:latest
+    container_name: strapi_bloco
+    environment:
+      NODE_ENV: production
+      ADMIN_JWT_SECRET: admin_jwt_secret
+      API_TOKEN_SALT: api_token_salt
+      APP_KEYS: app_key1,app_key2
+      JWT_SECRET: jwt_secret
+
+      # PostgreSQL
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: strapidb
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: Mfcd62!!Mfcd62!!
+
+      # MinIO S3
+      AWS_ACCESS_KEY_ID: dJvus2drgD1Uwd66bnu1
+      AWS_SECRET_ACCESS_KEY: a23r3JwsjhGl8o3osxmd9INB7zNQScd9k6aymYqc
+      AWS_REGION: us-east-1
+      AWS_S3_BUCKET: bloco
+      AWS_S3_ENDPOINT: https://imobs3.advancedbot.com.br
+      AWS_S3_FORCE_PATH_STYLE: "true"
+
+    volumes:
+      - strapi_bloco_data:/srv/app
+    networks:
+      - network_public
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.strapi_bloco.rule=Host(`bloco.advancedbot.com.br`)
+        - traefik.http.routers.strapi_bloco.entrypoints=websecure
+        - traefik.http.routers.strapi_bloco.tls.certresolver=letsencryptresolver
+        - traefik.http.services.strapi_bloco.loadbalancer.server.port=1337
+        - traefik.http.services.strapi_bloco.loadbalancer.passHostHeader=true
+
+volumes:
+  strapi_bloco_data: {}
+
+networks:
+  network_public:
+    external: true
+    name: network_public

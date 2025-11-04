@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  strapi:
+    container_name: imobai-strapi-v5
+    build:
+      context: .
+      dockerfile: ./apps/strapi/Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_CLIENT: ${DATABASE_CLIENT:-postgres}
+      DATABASE_HOST: db
+      DATABASE_PORT: ${DATABASE_PORT:-5432}
+      DATABASE_NAME: ${DATABASE_NAME:-strapi}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-strapi}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-strapi}
+      DATABASE_SSL: ${DATABASE_SSL:-false}
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      APP_KEYS: ${APP_KEYS}
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: ${PORT:-1337}
+    volumes:
+      - ./apps/strapi/public/uploads:/app/apps/strapi/public/uploads
+    ports:
+      - "${PORT:-1337}:${PORT:-1337}"
+    networks:
+      - strapi-network
+    depends_on:
+      - db
+
+  db:
+    container_name: imobai-postgres-v5
+    platform: linux/amd64
+    restart: unless-stopped
+    env_file: .env
+    image: postgres:16.0-alpine
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME:-strapi}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-strapi}
+      POSTGRES_DB: ${DATABASE_NAME:-strapi}
+    volumes:
+      - strapi-data:/var/lib/postgresql/data
+    networks:
+      - strapi-network
+
+volumes:
+  strapi-data:
+
+networks:
+  strapi-network:
+    driver: bridge
