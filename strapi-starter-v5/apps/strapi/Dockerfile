@@ -22,11 +22,10 @@ ARG WORKSPACE
 WORKDIR /app
 COPY . .
 
+# Align turbo version with monorepo and run via npx to avoid PATH issues
 # see https://turbo.build/repo/docs/reference/command-line-reference#turbo-prune---scopetarget
-RUN yarn global add turbo@^1.13.4
-# turbo prune requires a scope flag to target the workspace package
-# see https://turbo.build/repo/docs/reference/command-line-reference#turbo-prune---scopetarget
-RUN turbo prune --scope=${WORKSPACE} --docker
+RUN npm i -g turbo@^2.0.9 && turbo --version
+RUN npx turbo@^2.0.9 prune --scope=${WORKSPACE} --docker
 
 # -------------------------- stage installer ---------------------------------
 FROM base AS installer
@@ -45,7 +44,7 @@ COPY --from=pruned /app/out/json/ .
 COPY --from=pruned /app/out/yarn.lock ./yarn.lock
 
 RUN yarn global add node-gyp
-RUN yarn global add turbo@^1.13.4
+RUN npm i -g turbo@^2.0.9 && turbo --version
 # see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md#run---mounttypecache
 RUN \
     --mount=type=cache,target=/usr/local/share/.cache/yarn/v6,sharing=locked \
