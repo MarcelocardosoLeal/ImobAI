@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "Pedidos"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "clientName": {
+      "type": "string",
+      "required": true
+    },
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product"
+    },
+    "situation": {
+      "type": "enumeration",
+      "enum": [
+        "aguardando",
+        "preparando",
+        "concluído"
+      ]
+    }
+  }
+}
