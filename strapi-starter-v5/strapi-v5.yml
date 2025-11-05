@@ -4,18 +4,18 @@ services:
   strapi_v5:
     # Docker Swarm não suporta build em stacks. Use uma imagem publicada em registry.
     # Ajustado para seu namespace Docker Hub
-    image: docker.io/marcelolealhub/imobai-strapi-v5:5.29
+    image: docker.io/marcelolealhub/imobai-strapi-v5:5.30
     container_name: strapi_v5
     environment:
       NODE_ENV: production
 
       # Database (matches your Postgres 17 stack service name "postgres")
       DATABASE_CLIENT: postgres
-      DATABASE_HOST: postgres
+      DATABASE_HOST: postgres17_postgres
       DATABASE_PORT: 5432 # dentro da rede Docker o Postgres escuta em 5432
-      DATABASE_NAME: strapidb
+      DATABASE_NAME: imobdb
       DATABASE_USERNAME: postgres
-      DATABASE_PASSWORD: Mfcd62!!Mfcd62!!
+      DATABASE_PASSWORD: Mfcd62Mfcd62
 
       # Security secrets (inserir via Portainer Environment/Secrets)
       ADMIN_JWT_SECRET: +fwF3vQ9xpsMFgmEs34fVgwmvYSlKkQhuxnJqFmkJRfsErRxDDYcYNOCNOy91n+nQPIPk0aOiBCw/g2Xe+wQgA==
@@ -29,7 +29,7 @@ services:
       AWS_REGION: us-east-1
       AWS_S3_BUCKET: bloco
       AWS_S3_ENDPOINT: https://imobs3.advancedbot.com.br
-      AWS_S3_FORCE_PATH_STYLE: "true"
+      AWS_S3_FORCE_PATH_STYLE: true
 
     networks:
       - network_public

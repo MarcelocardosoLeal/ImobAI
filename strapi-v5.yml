@@ -1,0 +1,64 @@
+version: "3.7"
+
+services:
+  strapi_imob:
+    image: docker.io/marcelolealhub/imobai-strapi-v5:5.30
+    environment:
+      - NODE_ENV=production
+      - TZ=America/Sao_Paulo
+      # Banco Postgres 17 via DNS interno do Swarm
+      - DATABASE_CLIENT=postgres
+      - DATABASE_HOST=postgres17_postgres
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=imobdb
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=Mfcd62Mfcd62
+      # Desativar SSL na conexão Postgres (o servidor não suporta SSL)
+      - DATABASE_SSL=false
+      - DATABASE_SSL_SELF=false
+      # Segredos do Strapi (valores reais gerados para este deploy)
+      - APP_KEYS=aB9ftzvQ7pYc3Lh2xN0mR5SdT8Ue1Vw4Zk6Jy3Pa,Db4Nq7Xv1Rm5Lc8Yt2Wp0Hs9Ge3Kf6Jr,Hp6Lz1Qw9Tr3Vy2Bn5Md8Cs0Fx4Na7Pi,Qs8Vm2Wt5Rx9Yc3Ld1Np4Gf7Ha0Kb6Jt
+      - API_TOKEN_SALT=E2f9Kx7Qm1Vb5Lp8Tr3Yc0Wn6Zd4Hs9G
+      - ADMIN_JWT_SECRET=C7m2Xq5Pz8Vt1Lb4Rn9Yc3Wf6Hd0As7J
+      - JWT_SECRET=J4k8Lm2Qp9Vs1Tb5Rn7Yc3Wx6Hd0Az8N
+      # MinIO S3 (ajuste o bucket se desejar)
+      - AWS_ACCESS_KEY_ID=dJvus2drgD1Uwd66bnu1
+      - AWS_SECRET_ACCESS_KEY=a23r3JwsjhGl8o3osxmd9INB7zNQScd9k6aymYqc
+      - AWS_REGION=us-east-1
+      - AWS_S3_BUCKET=imob
+      - AWS_S3_ENDPOINT=https://imobs3.advancedbot.com.br
+      - AWS_S3_FORCE_PATH_STYLE=true
+    networks:
+      - network_public
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.strapi_imob.rule=Host(`imob.advancedbot.com.br`)
+        - traefik.http.routers.strapi_imob.entrypoints=websecure
+        - traefik.http.routers.strapi_imob.tls.certresolver=letsencryptresolver
+        - traefik.http.services.strapi_imob.loadbalancer.server.port=1337
+        - traefik.http.services.strapi_imob.loadbalancer.passHostHeader=true
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1024M
+      restart_policy:
+        condition: on-failure
+    # Persistir uploads localmente (recomendado)
+    volumes:
+      - strapi_imob_uploads:/app/public/uploads
+
+networks:
+  network_public:
+    external: true
+    name: network_public
+
+volumes:
+  strapi_imob_uploads:
+    external: true
+    name: strapi_imob_uploads

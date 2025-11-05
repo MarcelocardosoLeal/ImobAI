@@ -11,7 +11,7 @@ import InternalJobsRunActions from "./extensions/InternalJobsRunActions"
 
 export default {
   config: {
-    locales: ["en", "cs"],
+    locales: ["en", "cs", "pt-BR"],
     translations: {
       cs,
     },

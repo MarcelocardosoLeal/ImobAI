@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres:17.6
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Mfcd62Mfcd62
+      - POSTGRES_DB=imobdb
+      - TZ=America/Sao_Paulo
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d imobdb -h localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - network_public
+    ports:
+      - 5434:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2048M
+
+volumes:
+  postgres_data:
+    external: true
+    name: postgres_data17
+
+networks:
+  network_public:
+    external: true
+    name: network_public
