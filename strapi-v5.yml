@@ -21,6 +21,12 @@ services:
       - API_TOKEN_SALT=E2f9Kx7Qm1Vb5Lp8Tr3Yc0Wn6Zd4Hs9G
       - ADMIN_JWT_SECRET=C7m2Xq5Pz8Vt1Lb4Rn9Yc3Wf6Hd0As7J
       - JWT_SECRET=J4k8Lm2Qp9Vs1Tb5Rn7Yc3Wx6Hd0Az8N
+      # Integração e fluxo de agentes (flags e segredos)
+      - IMPORT_SECRET=CHANGE_ME
+      - AGENTS_RESTRICT_LEADS=false
+      - AGENT_AUTO_ASSIGN=false
+      # Token de transferência (Strapi v5)
+      - TRANSFER_TOKEN_SALT=CHANGE_ME
       # MinIO S3 (ajuste o bucket se desejar)
       - AWS_ACCESS_KEY_ID=dJvus2drgD1Uwd66bnu1
       - AWS_SECRET_ACCESS_KEY=a23r3JwsjhGl8o3osxmd9INB7zNQScd9k6aymYqc
