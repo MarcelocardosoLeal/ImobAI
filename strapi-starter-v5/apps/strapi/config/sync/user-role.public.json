@@ -26,6 +26,16 @@
       "locale": null
     },
     {
+      "action": "api::imovel.imovel.find",
+      "documentId": "imj5r2q6x1w0n7v8b3c4d5e6",
+      "locale": null
+    },
+    {
+      "action": "api::imovel.imovel.findOne",
+      "documentId": "imj5r2q6x1w0n7v8b3c4d5e7",
+      "locale": null
+    },
+    {
       "action": "plugin::users-permissions.auth.callback",
       "documentId": "tr6d6pxzwqnkhmmf8qhrgvt7",
       "locale": null
