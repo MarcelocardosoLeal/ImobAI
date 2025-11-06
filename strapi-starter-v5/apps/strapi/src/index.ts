@@ -1,8 +1,10 @@
 import type { Core } from "@strapi/strapi"
 
 import { registerPopulatePageMiddleware } from "./documentMiddlewares/page"
+import { registerLeadRestrictionMiddleware } from "./documentMiddlewares/lead"
 import { registerAdminUserSubscriber } from "./lifeCycles/adminUser"
 import { registerUserSubscriber } from "./lifeCycles/user"
+import { registerPermissionsAndToken } from "./lifeCycles/permissions"
 
 export default {
   /**
@@ -25,5 +27,10 @@ export default {
     registerUserSubscriber({ strapi })
 
     registerPopulatePageMiddleware({ strapi })
+    // Restrição de visualização de Leads por agente (ativada via ENV: AGENTS_RESTRICT_LEADS)
+    registerLeadRestrictionMiddleware({ strapi })
+
+    // Configurar permissões públicas e token de API para n8n
+    registerPermissionsAndToken({ strapi })
   },
 }

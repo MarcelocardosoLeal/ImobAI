@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "agentes",
+  "info": {
+    "singularName": "agente",
+    "pluralName": "agentes",
+    "displayName": "Agente",
+    "description": "Corretor/Agente responsável pelo atendimento de leads"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "nome": { "type": "string", "required": true },
+    "contato": { "type": "string" },
+    "ativo": { "type": "boolean", "default": true },
+    "last_assigned_at": { "type": "datetime" },
+    "contador_associado": { "type": "integer" },
+    "admin_user_id": { "type": "integer", "unique": true },
+    "leads": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::lead.lead",
+      "mappedBy": "assigned_agent"
+    }
+  }
+}

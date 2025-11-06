@@ -430,6 +430,41 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   }
 }
 
+export interface ApiAgenteAgente extends Struct.CollectionTypeSchema {
+  collectionName: "agentes"
+  info: {
+    description: "Corretor/Agente respons\u00E1vel pelo atendimento de leads"
+    displayName: "Agente"
+    pluralName: "agentes"
+    singularName: "agente"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  attributes: {
+    admin_user_id: Schema.Attribute.Integer & Schema.Attribute.Unique
+    ativo: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>
+    contador_associado: Schema.Attribute.Integer
+    contato: Schema.Attribute.String
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    last_assigned_at: Schema.Attribute.DateTime
+    leads: Schema.Attribute.Relation<"oneToMany", "api::lead.lead">
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::agente.agente"
+    > &
+      Schema.Attribute.Private
+    nome: Schema.Attribute.String & Schema.Attribute.Required
+    publishedAt: Schema.Attribute.DateTime
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
 export interface ApiFooterFooter extends Struct.SingleTypeSchema {
   collectionName: "footers"
   info: {
@@ -483,6 +518,47 @@ export interface ApiFooterFooter extends Struct.SingleTypeSchema {
   }
 }
 
+export interface ApiImovelImovel extends Struct.CollectionTypeSchema {
+  collectionName: "imoveis"
+  info: {
+    description: "Cadastro de im\u00F3veis (t\u00EDtulo, descri\u00E7\u00E3o, imagens, pre\u00E7o, tipo, contrato, localiza\u00E7\u00E3o e status)."
+    displayName: "Imoveis"
+    pluralName: "imoveis"
+    singularName: "imovel"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    active: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>
+    bairro: Schema.Attribute.String
+    cidade: Schema.Attribute.String
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    description: Schema.Attribute.RichText
+    estado: Schema.Attribute.String
+    images: Schema.Attribute.Media<"files" | "images" | "videos", true>
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::imovel.imovel"
+    > &
+      Schema.Attribute.Private
+    price: Schema.Attribute.Decimal
+    publishedAt: Schema.Attribute.DateTime
+    tipo_contrato: Schema.Attribute.Enumeration<["venda", "aluguel", "agil"]>
+    tipo_imovel: Schema.Attribute.Enumeration<
+      ["apartamento", "casa", "terreno", "galpao", "casa_condominio"]
+    >
+    tipologia: Schema.Attribute.String
+    title: Schema.Attribute.String & Schema.Attribute.Required
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
 export interface ApiInternalJobInternalJob extends Struct.CollectionTypeSchema {
   collectionName: "internal_jobs"
   info: {
@@ -517,6 +593,57 @@ export interface ApiInternalJobInternalJob extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
+  }
+}
+
+export interface ApiLeadLead extends Struct.CollectionTypeSchema {
+  collectionName: "leads"
+  info: {
+    description: ""
+    displayName: "Lead"
+    pluralName: "leads"
+    singularName: "lead"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  attributes: {
+    assigned_agent: Schema.Attribute.Relation<"manyToOne", "api::agente.agente">
+    cliente_intencao: Schema.Attribute.String
+    consentimento: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
+    consentimento_at: Schema.Attribute.DateTime
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    email: Schema.Attribute.Email
+    estagio: Schema.Attribute.Enumeration<
+      ["novo", "qualificado", "agendado", "visitou", "perdido", "convertido"]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<"novo">
+    imovel_pretendido: Schema.Attribute.String
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizacao_preferida: Schema.Attribute.String
+    localizations: Schema.Attribute.Relation<"oneToMany", "api::lead.lead"> &
+      Schema.Attribute.Private
+    name: Schema.Attribute.String
+    origem_campanha: Schema.Attribute.String
+    preferencia_horario: Schema.Attribute.Enumeration<
+      ["manha", "tarde", "noite", "indiferente"]
+    > &
+      Schema.Attribute.DefaultTo<"indiferente">
+    publishedAt: Schema.Attribute.DateTime
+    reminder_count: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>
+    retornar_em: Schema.Attribute.DateTime
+    ultimo_contato: Schema.Attribute.DateTime
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    visita_data: Schema.Attribute.Date
+    visita_hora: Schema.Attribute.Time
+    whatsapp: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique
   }
 }
 
@@ -1216,8 +1343,11 @@ declare module "@strapi/strapi" {
       "admin::transfer-token": AdminTransferToken
       "admin::transfer-token-permission": AdminTransferTokenPermission
       "admin::user": AdminUser
+      "api::agente.agente": ApiAgenteAgente
       "api::footer.footer": ApiFooterFooter
+      "api::imovel.imovel": ApiImovelImovel
       "api::internal-job.internal-job": ApiInternalJobInternalJob
+      "api::lead.lead": ApiLeadLead
       "api::navbar.navbar": ApiNavbarNavbar
       "api::page.page": ApiPagePage
       "api::redirect.redirect": ApiRedirectRedirect

@@ -252,3 +252,28 @@ In order to enable the feature, you need to configure the following environmenta
 - `CLIENT_URL`: Absolute URL of the frontend application (http://127.0.0.1:3000 for local development in most cases)
 - `STRAPI_PREVIEW_SECRET`: shared secret between frontend and backend, which is used to authenticate if the preview can be viewed.
   If configured correctly, you should be able to visit previews for content types that have been implemented in the `preview.config` configuration object in `config/admin.ts`.
+
+### Fluxo de corretores (Agente) – simples agora, avançado depois
+
+- Painel único `/admin` para todos os perfis.
+- Flags de ambiente para controlar comportamento:
+  - `AGENTS_RESTRICT_LEADS`: `false` (padrão) – corretores veem todos os leads; `true` – corretores veem apenas os leads atribuídos a eles (requer `admin_user_id` preenchido em cada Agente).
+  - `AGENT_AUTO_ASSIGN`: `false` (padrão) – sem auto-atribuição; `true` – ao criar um Lead sem `assigned_agent`, o sistema atribui automaticamente um Agente ativo, atualizando `last_assigned_at` e `contador_associado`.
+
+Como ativar a restrição por corretor:
+1. Defina `AGENTS_RESTRICT_LEADS=true` no `.env`.
+2. Em cada registro de `Agente`, preencha `admin_user_id` com o ID do usuário administrativo correspondente.
+3. Reinicie o Strapi.
+
+Como ativar a auto-atribuição de lead:
+1. Defina `AGENT_AUTO_ASSIGN=true` no `.env`.
+2. Ao criar um lead sem `assigned_agent`, o sistema seleciona um Agente ativo (preferindo o menos recente em `last_assigned_at`).
+
+Endpoints de import/export (sem n8n):
+- `POST /api/import/imovels` – importa imóveis (JSON); protegido por `X-Import-Secret`.
+- `POST /api/import/leads` – importa leads (JSON); protegido por `X-Import-Secret`.
+- `GET /api/export/imovels` – exporta imóveis (JSON por padrão; XML simples com `?format=xml`).
+
+Segurança:
+- Defina `IMPORT_SECRET` nas variáveis de ambiente e envie-o no cabeçalho `X-Import-Secret`.
+- Em produção, o segredo é obrigatório.
