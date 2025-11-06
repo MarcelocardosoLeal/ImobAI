@@ -37,6 +37,11 @@ Este documento explica como nosso GitHub Actions publica a imagem do Strapi e co
 - Abra a aba Actions > "Build and Push Strapi v5 image" > Run workflow.
 - Ou faça um commit em `strapi-starter-v5/**` para disparar automaticamente.
 
+### Trigger manual via commit (no-op)
+
+- Este arquivo pode ser atualizado com uma nota de manutenção para disparar o workflow sem impactar o código.
+- Último trigger: atualizado automaticamente para reenfileirar a build após interrupção.
+
 ## Erros comuns e correções
 
 - `unauthorized: incorrect username or password`
