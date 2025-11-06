@@ -82,5 +82,7 @@ COPY --from=installer /app .
 ENV PATH /app/apps/${APP}/node_modules/.bin:$PATH
 
 WORKDIR /app/apps/${APP}
-EXPOSE ${PORT:-1337}
+# Defina a porta de exposição como literal para evitar falhas de build no Docker
+ENV PORT=1337
+EXPOSE 1337
 CMD ["yarn", "start"]
