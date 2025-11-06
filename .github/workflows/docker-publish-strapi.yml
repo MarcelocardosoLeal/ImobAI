@@ -8,7 +8,7 @@ on:
       - 'packages/**'
       - 'package.json'
       - 'turbo.json'
-      - 'yarn.lock'
+      # Removido yarn.lock: padronização com npm
 
 jobs:
   build-and-push:
@@ -16,6 +16,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Audit runner versions (Node/NPM/Docker)
+        run: |
+          set -euxo pipefail
+          node -v || echo "Node não disponível no runner"
+          npm -v || echo "NPM não disponível no runner"
+          docker version || true
+
+      - name: Audit container base versions (node:20-slim)
+        run: |
+          set -euxo pipefail
+          docker run --rm node:20-slim bash -lc 'node -v && npm -v'
 
       - name: Debug paths and files
         run: |
