@@ -92,8 +92,7 @@
     "typescript": "^5"
   },
   "engines": {
-    "node": "22.x.x",
-    "yarn": "1.22.x"
+    "node": "20.x.x"
   },
   "trustedDependencies": [
     "sharp"
