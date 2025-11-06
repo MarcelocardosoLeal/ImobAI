@@ -53,7 +53,7 @@ RUN \
 # Because of yarn v1 install sharp explicitly with "--ignore-engines". See https://github.com/lovell/sharp/issues/3871
 RUN \
     --mount=type=cache,target=/usr/local/share/.cache/yarn/v6,sharing=locked \
-    yarn workspace ${WORKSPACE} add sharp --ignore-engines --prefer-offline --frozen-lockfile
+    yarn workspace ${WORKSPACE} add sharp --ignore-engines --prefer-offline
 
 ENV PATH /app/apps/${APP}/node_modules/.bin:$PATH
 
@@ -61,7 +61,11 @@ ENV PATH /app/apps/${APP}/node_modules/.bin:$PATH
 COPY --from=pruned /app/out/full/ .
 COPY turbo.json turbo.json
 
-RUN turbo run build --filter=${WORKSPACE}
+# Em vez de usar turbo para o build (que pode falhar por configuração de tarefas/outputs),
+# use diretamente o script de build do workspace do Strapi.
+RUN \
+    --mount=type=cache,target=/usr/local/share/.cache/yarn/v6,sharing=locked \
+    yarn workspace ${WORKSPACE} build
 
 # -------------------------- stage runner ---------------------------------
 FROM base AS runner
