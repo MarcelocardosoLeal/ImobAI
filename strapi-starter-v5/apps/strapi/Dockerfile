@@ -48,7 +48,7 @@ RUN npm i -g turbo@^2.0.9 && turbo --version
 # see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md#run---mounttypecache
 RUN \
     --mount=type=cache,target=/usr/local/share/.cache/yarn/v6,sharing=locked \
-    yarn --prefer-offline --frozen-lockfile --ignore-scripts --production
+    yarn install --prefer-offline --frozen-lockfile
 
 # Because of yarn v1 install sharp explicitly with "--ignore-engines". See https://github.com/lovell/sharp/issues/3871
 RUN \
