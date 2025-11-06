@@ -60,6 +60,7 @@ jobs:
 
       - name: Build and push Strapi v5 image
         uses: docker/build-push-action@v6
+        continue-on-error: true
         with:
           # Use the monorepo root (strapi-starter-v5) as build context so Dockerfile COPY paths resolve correctly
           context: strapi-starter-v5
@@ -84,6 +85,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push to GHCR (fallback/secondary)
+        if: always()
         uses: docker/build-push-action@v6
         with:
           context: strapi-starter-v5
