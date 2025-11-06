@@ -1,5 +1,35 @@
 # CI/CD Debug Log - Build do GitHub Actions
 
+## Atualização importante (produção) — Migração para Debian slim + npm
+
+Para maximizar a confiabilidade do build em produção, migramos o Dockerfile do Strapi para base Debian (node:20-slim) e passamos a usar npm (sem Yarn).
+
+Motivos:
+- Reduzir falhas de módulos nativos (sharp/libvips) comuns em Alpine/Node 22
+- Alinhar com suporte oficial do Strapi v5 (Node 18/20)
+- Simplificar instalação e build (npm workspaces, sem PnP)
+
+Principais mudanças aplicadas:
+- Dockerfile: FROM node:20-slim; instalação de python3/make/g++; npm install; npm run build --workspace=@repo/strapi; runner não-root; PORT=1337 e EXPOSE 1337
+- package.json (raiz): remover only-allow yarn; postinstall passa a usar npm; engines atualizadas para Node 20; packageManager ajustado para npm
+- apps/strapi/package.json: engines atualizadas para Node 20
+- .nvmrc: atualizado para 20
+
+Impacto no CI/CD:
+- O workflow “Build and Push Strapi v5 image” continua o mesmo; apenas a build interna usa npm
+- Espera-se maior taxa de sucesso nos jobs “Install dependencies” e “Build Strapi admin”
+
+Desenvolvimento local (equivalência de comandos):
+- Antes: yarn develop (scripts ainda existem)
+- Agora (recomendado): npm run develop dentro de apps/strapi
+- Banco local: docker compose up -d db
+
+Validação pós-migração:
+- Verificar publicação das tags no Docker Hub/GHCR (latest e 5.30)
+- Subir container local e acessar /admin
+
+---
+
 ## 📋 Resumo Executivo
 
 Este documento registra todos os erros encontrados no processo de build do GitHub Actions para o Strapi v5 e as correções aplicadas. O principal problema era a falta do Yarn no container Alpine, causando falhas críticas no build.
