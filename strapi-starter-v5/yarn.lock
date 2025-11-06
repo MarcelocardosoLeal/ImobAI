@@ -6289,7 +6289,7 @@
     qs "6.11.1"
     sift "16.0.1"
 
-"@strapi/plugin-color-picker@^5.29.0":
+"@strapi/plugin-color-picker@5.29.0":
   version "5.29.0"
   resolved "https://registry.yarnpkg.com/@strapi/plugin-color-picker/-/plugin-color-picker-5.29.0.tgz#1930640657ea6aa2e5b57fceed091a7014f1e56c"
   integrity sha512-hPWi+XtgWghTFKKZV3uNVQvSwmNP16azjI9wTH12HM1OT1f26KELLwqVDOqCrHlFLKBtYlg6e++kWvP1H+mY8w==
@@ -6299,7 +6299,7 @@
     react-colorful "5.6.1"
     react-intl "6.6.2"
 
-"@strapi/plugin-sentry@^5.29.0":
+"@strapi/plugin-sentry@5.29.0":
   version "5.29.0"
   resolved "https://registry.yarnpkg.com/@strapi/plugin-sentry/-/plugin-sentry-5.29.0.tgz#fc0930236b9e9652feb222c8ac0a83a1ac624abc"
   integrity sha512-r3EWLTgFUIwRO8SlD3npebOJNAY+J4XIaAvQszom1Plgphk2LKFGKSDD3uQfP++ay4LV3s3PA+tsx0SOLTw+yw==
@@ -6325,7 +6325,7 @@
     showdown "^2.1.0"
     styled-components "^6.0.0"
 
-"@strapi/plugin-users-permissions@^5.29.0":
+"@strapi/plugin-users-permissions@5.29.0":
   version "5.29.0"
   resolved "https://registry.yarnpkg.com/@strapi/plugin-users-permissions/-/plugin-users-permissions-5.29.0.tgz#4310ba062729612164d60731d8f53abebf610e0a"
   integrity sha512-K+fTJ9XpSLxAixw52nqAUqcWU/PnVbUR6sKSgz/fzfzCYJoJEZFZ4/wBXabDi+OMPEl1J/LFapn6ttQiHEtrEQ==
@@ -6351,7 +6351,7 @@
     yup "0.32.9"
     zod "3.25.67"
 
-"@strapi/provider-email-mailgun@^5.29.0":
+"@strapi/provider-email-mailgun@5.29.0":
   version "5.29.0"
   resolved "https://registry.yarnpkg.com/@strapi/provider-email-mailgun/-/provider-email-mailgun-5.29.0.tgz#e26b2f0ebeed70e31015a480e37f8d2c84ccfd12"
   integrity sha512-u08z9+CHLG4caJW7brVQ37vssEABbwLUc2naCBbV0hciCK/RnXr5apviW3JQOQTMZH+5cA9ocbrg9uiUpHSm+Q==
@@ -6368,7 +6368,7 @@
     "@strapi/utils" "5.29.0"
     sendmail "^1.6.1"
 
-"@strapi/provider-upload-aws-s3@^5.29.0":
+"@strapi/provider-upload-aws-s3@5.29.0":
   version "5.29.0"
   resolved "https://registry.yarnpkg.com/@strapi/provider-upload-aws-s3/-/provider-upload-aws-s3-5.29.0.tgz#2d8777ec4306df318c87052e7ed598571e3aecdb"
   integrity sha512-RqM+7LZpmFP5OFeYXVdqwVmONipL6UsNcFjxWVvribnWUgpfAttgc3ZJLS/HtncRWASjZj79c/SCYpYpaAA98g==
@@ -6404,7 +6404,7 @@
     react-redux "8.1.3"
     yup "0.32.9"
 
-"@strapi/strapi@^5.29.0":
+"@strapi/strapi@5.29.0":
   version "5.29.0"
   resolved "https://registry.yarnpkg.com/@strapi/strapi/-/strapi-5.29.0.tgz#d9db5442ff86be0ab2f727b09400153e3a4c71a3"
   integrity sha512-8kJk1G7W5kGlB7EterEIGR63WZeoOo2az7THE5db/mP9paYmrfuGSsUY19XYRlGwcjinU9AKlXiXHKluDgilHw==
