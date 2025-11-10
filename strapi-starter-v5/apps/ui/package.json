@@ -16,7 +16,9 @@
     "not op_mini all"
   ],
   "resolutions": {
-    "**/sharp": "0.33.5"
+  },
+  "overrides": {
+    "sharp": "0.33.5"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
@@ -92,8 +94,7 @@
     "typescript": "^5"
   },
   "engines": {
-    "node": "22.x.x",
-    "yarn": "1.22.x"
+    "node": "20.x.x"
   },
   "trustedDependencies": [
     "sharp"

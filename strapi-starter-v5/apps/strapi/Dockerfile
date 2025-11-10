@@ -10,77 +10,45 @@
 ARG APP=strapi
 ARG WORKSPACE=@repo/strapi
 
-FROM node:22-alpine AS base
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk update && apk add --no-cache libc6-compat
+# -------------------------- stage builder (npm + debian slim) ---------------------------------
+FROM node:20-slim AS builder
 
-# -------------------------- stage pruned ---------------------------------
-FROM base AS pruned
-ARG WORKSPACE
+# Instalar toolchain necessária para módulos nativos (node-gyp) e git
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 make g++ git \
+    && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+ENV NODE_ENV=development
 WORKDIR /app
+
+# Copiamos todo o monorepo para simplificar a instalação via npm workspaces
 COPY . .
 
-# Align turbo version with monorepo and run via npx to avoid PATH issues
-# see https://turbo.build/repo/docs/reference/command-line-reference#turbo-prune---scopetarget
-RUN npm i -g turbo@^2.0.9 && turbo --version
-RUN npx turbo@^2.0.9 prune --scope=${WORKSPACE} --docker
+# Instala todas as dependências do monorepo (inclui devDependencies)
+# Usamos npm ao invés de yarn para máxima compatibilidade em produção
+RUN npm install --no-audit --no-fund
 
-# -------------------------- stage installer ---------------------------------
-FROM base AS installer
-ARG APP
-ARG WORKSPACE
-ENV NODE_ENV=production
-
-WORKDIR /app
-
-# Install system dependencies for Strapi
-RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev git > /dev/null 2>&1
-
-# First install dependencies (as they change less often)
-COPY .gitignore .gitignore
-COPY --from=pruned /app/out/json/ .
-COPY --from=pruned /app/out/yarn.lock ./yarn.lock
-
-RUN yarn global add node-gyp
-RUN npm i -g turbo@^2.0.9 && turbo --version
-# see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md#run---mounttypecache
-RUN \
-    --mount=type=cache,target=/usr/local/share/.cache/yarn/v6,sharing=locked \
-    yarn --prefer-offline --frozen-lockfile --ignore-scripts --production
-
-# Because of yarn v1 install sharp explicitly with "--ignore-engines". See https://github.com/lovell/sharp/issues/3871
-RUN \
-    --mount=type=cache,target=/usr/local/share/.cache/yarn/v6,sharing=locked \
-    yarn workspace ${WORKSPACE} add sharp --ignore-engines --prefer-offline --frozen-lockfile
-
-ENV PATH /app/apps/${APP}/node_modules/.bin:$PATH
-
-# Build the project and its dependencies
-COPY --from=pruned /app/out/full/ .
-COPY turbo.json turbo.json
-
-RUN turbo run build --filter=${WORKSPACE}
+# Build do Strapi via npm workspaces
+RUN npm run build --workspace=${WORKSPACE}
 
 # -------------------------- stage runner ---------------------------------
-FROM base AS runner
+FROM node:20-slim AS runner
 ARG APP
 ARG WORKSPACE
 ENV NODE_ENV=production
 
-RUN apk update && apk add --no-cache vips-dev
-
-# Don't run production as root
-RUN addgroup --system --gid 1001 strapi
-RUN adduser --system --uid 1001 strapi
-USER strapi
+# Criar usuário não-root
+RUN groupadd -g 1001 strapi && useradd -m -u 1001 -g strapi strapi
 
 WORKDIR /app
-COPY --from=installer /app .
+COPY --from=builder /app .
 
 ENV PATH /app/apps/${APP}/node_modules/.bin:$PATH
 
 WORKDIR /app/apps/${APP}
-EXPOSE ${PORT:-1337}
-CMD ["yarn", "start"]
+ENV PORT=1337
+EXPOSE 1337
+
+# Iniciar Strapi
+USER strapi
+CMD ["npm", "run", "start"]
