@@ -2,6 +2,7 @@
 # Prevent committing environment secrets
 cafeteria-strapi/.env
 *.env
+.env.*
 !*.env.example
 
 # Node/Yarn/Turbo typical ignores
@@ -9,6 +10,9 @@ node_modules/
 .turbo/
 .pnp/
 .pnp.js
+node20/
+node-v*.zip
+create-strapi-app-*.tgz
 .yarn/*
 !.yarn/patches
 !.yarn/releases
