@@ -1,13 +1,10 @@
 import type { UID } from "@strapi/strapi"
 
-type ImportItem = {
-  data: Record<string, any>
-}
+type ImportItem = { data: Record<string, any> }
 
 function assertSecret(ctx: any) {
   const required = process.env.IMPORT_SECRET
   if (!required) {
-    // If no secret configured, allow in development only
     const isDev = process.env.NODE_ENV !== "production"
     if (!isDev) {
       ctx.throw(403, "IMPORT_SECRET is not configured")
@@ -31,8 +28,6 @@ async function upsertMany(
   const results: any[] = []
   for (const item of items) {
     const data = item?.data ?? {}
-
-    // Try to dedupe by externalSourceId (or provided field)
     const dedupeValue = data?.[dedupeField]
     let existing: any | null = null
     if (dedupeValue) {
@@ -49,53 +44,41 @@ async function upsertMany(
       })
       results.push({ action: "updated", documentId: updated.documentId })
     } else {
-      const created = await strapi.documents(uid).create({
-        data,
-        status,
-      })
+      const created = await strapi.documents(uid).create({ data, status })
       results.push({ action: "created", documentId: created.documentId })
     }
   }
-
   return { count: results.length, results }
 }
 
 export default {
   async importImovels(ctx: any) {
     assertSecret(ctx)
-
     const body = ctx.request.body
     const items: ImportItem[] = Array.isArray(body) ? body : [body]
-
     const res = await upsertMany("api::imovel.imovel", items, {
       status: ctx.query?.status === "draft" ? "draft" : "published",
       dedupeField: (ctx.query?.dedupeField as string) || "externalSourceId",
     })
-
     ctx.send({ ok: true, ...res })
   },
 
   async importLeads(ctx: any) {
     assertSecret(ctx)
-
     const body = ctx.request.body
     const items: ImportItem[] = Array.isArray(body) ? body : [body]
-
     const res = await upsertMany("api::lead.lead", items, {
       status: ctx.query?.status === "draft" ? "draft" : "published",
       dedupeField: (ctx.query?.dedupeField as string) || "externalSourceId",
     })
-
     ctx.send({ ok: true, ...res })
   },
 
   async exportImovels(ctx: any) {
     assertSecret(ctx)
-
     const page = Number(ctx.query?.page ?? 1)
     const pageSize = Math.min(Number(ctx.query?.pageSize ?? 50), 250)
     const status = ctx.query?.status === "draft" ? "draft" : "published"
-
     const filters = ctx.query?.filters ? JSON.parse(String(ctx.query.filters)) : {}
 
     const result = await strapi.documents("api::imovel.imovel").findMany({
@@ -108,8 +91,7 @@ export default {
     const format = String(ctx.query?.format || "json").toLowerCase()
     if (format === "xml") {
       ctx.set("Content-Type", "application/xml")
-      // Minimal XML conversion (flat fields only)
-      const xmlItems = (result?.results ?? []).map((item: any) => {
+      const xmlItems = (Array.isArray(result) ? result : []).map((item: any) => {
         const fields = Object.entries(item).filter(([k]) => k !== "documentId")
         const inner = fields
           .map(([k, v]) => `<${k}>${String(typeof v === "object" ? JSON.stringify(v) : v ?? "")}</${k}>`)
@@ -120,7 +102,6 @@ export default {
       ctx.body = xml
       return
     }
-
-    ctx.send({ ok: true, ...result })
+    ctx.send({ ok: true, results: Array.isArray(result) ? result : [] })
   },
 }

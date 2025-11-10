@@ -8,7 +8,7 @@
     "build": "strapi build",
     "config:dump": "strapi configuration:dump -f dump.json",
     "config:restore": "strapi configuration:restore -f dump.json",
-    "dev": "npm run run:db && npm run develop",
+    "dev": "yarn run:db && yarn develop",
     "develop": "strapi develop",
     "develop:watch": "strapi develop --watch-admin",
     "export:all": "strapi export --file strapi-export --no-encrypt",
@@ -57,7 +57,8 @@
     "typescript": "^5"
   },
   "engines": {
-    "node": "20.x.x"
+    "node": "22.x.x",
+    "yarn": "1.22.x"
   },
   "strapi": {
     "uuid": "@repo/strapi"
